@@ -29,6 +29,11 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.34'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 
+	implementation('com.github.javafaker:javafaker:1.0.2') {
+		exclude group: 'org.yaml', module: 'snakeyaml'
+	}
+
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
