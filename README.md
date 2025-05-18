@@ -1,4 +1,4 @@
-# Garmin Scraper API
+# Garmin Scraper API [![codecov](https://codecov.io/gh/nklido/garmin-data-api/graph/badge.svg?token=4YK8TJD2ZY)](https://codecov.io/gh/nklido/garmin-data-api)
 A Spring boot service that scrapes Garmin’s web interface to provide a RESTful API for activity and user data. This project covers:
 
 - **Authorization** via the [garmin-auth-api](https://github.com/nklido/garmin-auth-api).  
