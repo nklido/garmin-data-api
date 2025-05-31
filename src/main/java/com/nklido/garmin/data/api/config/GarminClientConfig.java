@@ -1,12 +1,21 @@
 package com.nklido.garmin.data.api.config;
 
 import com.nklido.garmin.data.api.security.RequestContext;
+import com.sun.net.httpserver.HttpsServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,8 +43,19 @@ public class GarminClientConfig {
             return execution.execute(request, body);
         });
 
+        requestTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+            @Override
+            public void handleError(@NonNull ClientHttpResponse response) throws IOException {
+                HttpStatusCode statusCode = response.getStatusCode();
+                if (statusCode == HttpStatus.UNAUTHORIZED) {
+                    throw new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED
+                    );
+                }
+                super.handleError(response);
+            }
+        });
+
         return requestTemplate;
     }
-
-
 }
