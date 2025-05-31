@@ -1,9 +1,8 @@
 package com.nklido.garmin.data.api.adapter.garmin.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 

@@ -1,9 +1,6 @@
 package com.nklido.garmin.data.api.adapter.garmin;
 
-import com.nklido.garmin.data.api.adapter.garmin.dto.ActivityResponseDto;
-import com.nklido.garmin.data.api.adapter.garmin.dto.ActivityTypeDto;
-import com.nklido.garmin.data.api.adapter.garmin.dto.UserConnectionResponseDto;
-import com.nklido.garmin.data.api.adapter.garmin.dto.UserProfileDto;
+import com.nklido.garmin.data.api.adapter.garmin.dto.*;
 import com.nklido.garmin.data.api.security.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +12,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -27,6 +26,8 @@ public class Client {
     private static final Logger logger = LoggerFactory.getLogger(Client.class);
 
     private static final String ACTIVITIES_ENDPOINT = "/activitylist-service/activities";
+
+    private static final String ACTIVITIES_SEARCH_ENDPOINT = "/activitylist-service/activities/search/activities";
 
     private static final String ACTIVITY_TYPES_ENDPOINT = "/activity-service/activity/activityTypes";
 
@@ -49,6 +50,20 @@ public class Client {
 
         return garminRestTemplate
                 .exchange(url, HttpMethod.GET, null, ActivityResponseDto.class)
+                .getBody();
+    }
+
+    public List<ActivityDto> getActivitiesByDateRange(LocalDate startDate, LocalDate endDate) {
+        String url = UriComponentsBuilder.fromHttpUrl(garminBaseUrl + ACTIVITIES_SEARCH_ENDPOINT)
+                .queryParam("startDate", startDate)
+                .queryParam("endDate", endDate)
+                .queryParam("start", 0)
+                .queryParam("limit", 100)
+                .toUriString();
+
+        return garminRestTemplate
+                .exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<ActivityDto>>() {
+                })
                 .getBody();
     }
 

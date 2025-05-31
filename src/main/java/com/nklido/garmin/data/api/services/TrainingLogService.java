@@ -30,10 +30,14 @@ public class TrainingLogService {
 
     public List<WeeklyLog> getWeeklyLog(String displayName, Integer start, Integer limit) {
         List<WeeklyLog> summaries = new ArrayList<>();
-        List<Activity> activities = garminService.getActivities(displayName, 0,30);
 
         ZonedDateTime currentWeekStart = getCurrentWeekStart();
         ZonedDateTime currentWeekEnd = getCurrentWeekEnd();
+
+        List<Activity> activities = garminService.getActivitiesByDateRange(
+                getCurrentWeekStart().minusWeeks(start + limit - 1).toLocalDate(),
+                getCurrentWeekEnd().minusWeeks(start).toLocalDate()
+        );
 
         for (int i = start; i < start + limit; i++) {
             ZonedDateTime weekStart = currentWeekStart.minusWeeks(i);
@@ -74,6 +78,7 @@ public class TrainingLogService {
             weeklyLog.setEndDate(weekEnd.toLocalDateTime());
             weeklyLog.setDailyActivities(dailyActivities);
             weeklyLog.setTotalDistance(totalDistance);
+            weeklyLog.setTotalTimeSeconds(totalWeekDuration);
             weeklyLog.setAverageHeartRate(getWeeklyAverageHeartRate(activitiesInWeek, totalWeekDuration));
             weeklyLog.setAveragePace(getWeeklyAveragePace(activitiesInWeek, totalWeekDuration));
             weeklyLog.setZones(getWeeklyZonePercentage(activitiesInWeek, totalWeekDuration));

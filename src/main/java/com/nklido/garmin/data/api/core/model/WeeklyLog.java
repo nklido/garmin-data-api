@@ -21,7 +21,7 @@ public class WeeklyLog {
 
     private Double totalDistance;
 
-    private String totalTime;
+    private Double totalTimeSeconds;
 
     private Double averageHeartRate;
 

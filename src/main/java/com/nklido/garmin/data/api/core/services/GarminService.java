@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -27,6 +28,13 @@ public class GarminService {
     public List<Activity> getActivities(String displayName, Integer start, Integer limit) {
         return garminClient.getActivities(displayName, start, limit)
                 .getActivityList()
+                .stream()
+                .map(ActivityMapper::toDomain)
+                .toList();
+    }
+
+    public List<Activity> getActivitiesByDateRange(LocalDate startDate, LocalDate endDate) {
+        return garminClient.getActivitiesByDateRange(startDate, endDate)
                 .stream()
                 .map(ActivityMapper::toDomain)
                 .toList();
