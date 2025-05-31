@@ -6,6 +6,7 @@ import com.nklido.garmin.data.api.core.services.GarminService;
 import com.nklido.garmin.data.api.fixtures.ActivityDtoFactory;
 import com.nklido.garmin.data.api.mapper.ActivityMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -22,8 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -58,9 +58,7 @@ class GarminServiceTest {
                         .getActivityList().stream().map(ActivityMapper::toDomain)
                         .toList();
 
-        when(garminService.getActivities(eq("example-display-name"), anyInt(), anyInt())).thenReturn(activities);
-
-
+        when(garminService.getActivitiesByDateRange(any(), any())).thenReturn(activities);
         List<WeeklyLog> trainingLog = trainingLogService.getWeeklyLog("example-display-name", 0, 5);
 
         assertThat(trainingLog.size()).isEqualTo(5);

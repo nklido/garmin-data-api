@@ -28,8 +28,6 @@ class GarminServiceTest {
     @Test
     void testGetActivities() throws IOException {
         ActivityResponseDto response = ActivityDtoFactory.getList();
-        System.out.println(response);
-
         when(garminClient.getActivities("example-display-name", 0, 10)).thenReturn(response);
 
         List<Activity> activities = garminService.getActivities("example-display-name",0, 10);
